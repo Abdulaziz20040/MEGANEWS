@@ -34,7 +34,7 @@ const Slider: React.FC = () => {
   return (
     <div className="mx-auto mt-10">
       <div className="flex flex-wrap gap-4">
-        {news.slice(1, 3).map((item, index) => (
+        {news.slice(1, 3).map((item) => (
           <div
             key={item.id}
             className="relative rounded-lg overflow-hidden"

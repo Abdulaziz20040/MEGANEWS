@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { FaBookmark } from "react-icons/fa";
+import { useEffect, useState } from "react";
 
 interface Card {
   id: number;

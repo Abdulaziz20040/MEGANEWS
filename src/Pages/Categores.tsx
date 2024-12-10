@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
