@@ -16,7 +16,6 @@ interface Post {
 
 const Market: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 12;
 

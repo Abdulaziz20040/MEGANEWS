@@ -96,13 +96,6 @@ const Slider: React.FC = () => {
           </div>
         )}
       </div>
-      <style jsx>{`
-        @media (max-width: 768px) {
-          .flex > div {
-            width: 100% !important;
-          }
-        }
-      `}</style>
     </div>
   );
 };

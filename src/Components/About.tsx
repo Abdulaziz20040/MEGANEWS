@@ -1,4 +1,3 @@
-import React from "react";
 import { FaFax } from "react-icons/fa";
 import { IoIosPhonePortrait } from "react-icons/io";
 import { IoPlayCircleOutline } from "react-icons/io5";

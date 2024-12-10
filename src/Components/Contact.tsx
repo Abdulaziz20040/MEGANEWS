@@ -1,7 +1,6 @@
-import React from "react";
 import { BsImage } from "react-icons/bs";
 import { CgColorPicker } from "react-icons/cg";
-import { FaAlignLeft, FaCode, FaLink, FaRegFile } from "react-icons/fa";
+import { FaAlignLeft, FaCode, FaLink } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { LuSend } from "react-icons/lu";
 
