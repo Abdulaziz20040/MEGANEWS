@@ -1,0 +1,86 @@
+.post-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1.5rem;
+  background-color: #f9fafb;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 1024px) {
+  .post-container {
+    flex-direction: row;
+  }
+}
+
+.chart-section {
+  flex: 2;
+}
+
+.chart-wrapper {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  justify-content: center;
+  align-items: center;
+  max-width: 950px;
+  height: 450px;
+  margin: 0 auto;
+}
+
+.satisfaction-section {
+  flex: 1;
+}
+
+.satisfaction-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .satisfaction-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .satisfaction-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.satisfaction-item {
+  text-align: center;
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.satisfaction-item .emoji {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.satisfaction-item .month {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.satisfaction-item .points {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+/* Sarlavha */
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #ef4444;
+  margin-bottom: 1rem;
+}

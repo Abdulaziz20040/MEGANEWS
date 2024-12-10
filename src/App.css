@@ -1,0 +1,14 @@
+.Container_MEGA {
+  max-width: 1450px;
+  margin: auto;
+  padding: 20px 0;
+}
+
+.hide-scrollbar {
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
