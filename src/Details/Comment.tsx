@@ -6,16 +6,20 @@ import "./detals.css";
 
 interface CommentType {
   username: string;
-  commet: string;
+  comment: string;
   commentDate: string;
   userimg?: string;
 }
 
-const Comment: React.FC = () => {
+interface CommentProps {
+  id: string;
+}
+
+const Comment: React.FC<CommentProps> = ({ id }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [comments, setComments] = useState<CommentType[]>([]);
-  const [formData, setFormData] = useState({ name: "", description: "" });
+  const [formData, setFormData] = useState({ name: "", comment: "" });
 
   useEffect(() => {
     fetchComments();
@@ -23,40 +27,62 @@ const Comment: React.FC = () => {
 
   const fetchComments = async () => {
     setLoading(true);
+    setError("");
     try {
       const res = await axios.get(
-        "https://df2174b8e5e5a31d.mokky.dev/MEGA_news"
+        `https://df2174b8e5e5a31d.mokky.dev/MEGA_news`
       );
-      console.log("API Response:", res.data);
-      if (res.data && res.data[0] && res.data[0].comment) {
-        setComments(res.data[0].comment);
+      const fetchedComments = res.data?.[0]?.comment;
+      if (Array.isArray(fetchedComments)) {
+        setComments(fetchedComments);
       } else {
-        console.log("No comments field found in the response");
+        setError("No valid comments found in the response.");
       }
     } catch (err) {
-      console.error("Error fetching comments:", err);
       setError("Failed to load comments. Please try again later.");
+      console.error("Error fetching comments:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (newData) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
     try {
+      const payload = {
+        username: formData.name,
+        userimg: "",
+        commt: formData.comment,
+        commnetDate: new Date().toLocaleString(),
+      };
+
       const response = await axios.post(
-        "https://966ba871b82a20db.mokky.dev/test",
-        newData
+        `https://df2174b8e5e5a31d.mokky.dev/MEGA_news/${id}/comment`,
+        payload
       );
-      setComments((prevData) => [...prevData, response.data]);
-    } catch (error) {
-      console.error("Ma'lumot yaratishda xatolik:", error);
+
+      console.log("Izoh muvaffaqiyatli qo'shildi:", response.data);
+
+      setComments((prevData) => [...prevData, payload]);
+
+      setFormData({ name: "", comment: "" });
+    } catch (err: any) {
+      console.error("Izoh qo'shishda xato:", err.response);
+      setError("Izohni qo'shib bo'lmadi");
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <div className="comment-section">
       <div className="comment-header mb-4">
@@ -70,7 +96,7 @@ const Comment: React.FC = () => {
       {error && <p className="text-red-500">{error}</p>}
 
       <div>
-        {comments && comments.length > 0 ? (
+        {comments.length > 0 ? (
           comments.map((item, index) => (
             <div
               key={index}
@@ -86,7 +112,7 @@ const Comment: React.FC = () => {
                 )}
                 <h1 className="font-bold">{item.username}</h1>
                 <p className="text-sm text-gray-600">{item.commentDate}</p>
-                <p className="text-sm">{item.commet}</p>
+                <p className="text-sm">{item.comment}</p>
               </div>
               <button className="flex items-center text-sm text-blue-500 mt-2 bg-[#3E32320D] px-4 py-2 rounded-lg hover:bg-[#3E32320D] transition duration-300">
                 <FaReply className="mr-2 text-blue-500" />
@@ -113,38 +139,36 @@ const Comment: React.FC = () => {
               </label>
               <input
                 type="text"
-                value={name}
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
                 className="block w-full px-3 py-2 mb-4 border border-gray-300 rounded-md"
                 required
               />
             </div>
 
-            <div className="mb-4">
+            <div>
               <label className="block text-sm font-medium text-gray-700">
                 Comment
               </label>
               <textarea
-                value={comment}
+                name="comment"
+                value={formData.comment}
                 onChange={handleChange}
-                className="block w-full mt-2 h-[207px] px-3 py-2 outline-none bg-[#F5F5F5] rounded-md"
+                className="block w-full px-3 py-2 mt-2 h-[150px] border border-gray-300 rounded-md"
                 placeholder="Enter your comment"
                 required
               ></textarea>
             </div>
           </div>
 
-          <div className="flex items-center justify-between gap-8">
-            <div className="w-[19%]">
-              <button
-                type="submit"
-                className="bg-[#F81539BF] h-[55px] w-[170px] flex items-center gap-1 py-2 px-4 text-white rounded-xl"
-              >
-                <BiMessageRoundedDots className="text-[20px]" />
-                Send Comment
-              </button>
-            </div>
-          </div>
+          <button
+            type="submit"
+            className="bg-[#F81539BF] flex items-center gap-1 py-2 px-4 text-white rounded-xl"
+          >
+            <BiMessageRoundedDots className="text-[20px]" />
+            Send Comment
+          </button>
         </form>
       </div>
     </div>

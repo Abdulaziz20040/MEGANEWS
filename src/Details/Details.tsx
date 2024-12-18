@@ -104,7 +104,7 @@ function Details() {
           </div> */}
 
           <div className="mt-6">
-            <Commment />
+            <Commment id={id} postId={data.id} />
           </div>
         </div>
 
