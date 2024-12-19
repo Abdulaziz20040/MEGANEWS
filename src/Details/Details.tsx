@@ -10,22 +10,41 @@ import ToppostDetails from "./ToppostDetails";
 import Commment from "./Comment";
 import ReletedPost from "../User/RelatedPosts";
 
-function Details() {
+const Details = () => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { id } = useParams();
+
   const [follow, setFollow] = useState<boolean>(() => {
     const saved = localStorage.getItem("followStatus");
     return saved ? JSON.parse(saved) : false;
   });
 
+  const [favorite, setFavorite] = useState<any[]>(() => {
+    const savedFavorites = localStorage.getItem("favorites");
+    return savedFavorites ? JSON.parse(savedFavorites) : [];
+  });
+
+  const saveToLocalStorage = (key: string, value: any) => {
+    localStorage.setItem(key, JSON.stringify(value));
+  };
+
   const handleFollow = () => {
     setFollow((prev) => {
       const newStatus = !prev;
-      localStorage.setItem("followStatus", JSON.stringify(newStatus));
+      saveToLocalStorage("followStatus", newStatus);
       return newStatus;
     });
+  };
+
+  const handleFavorite = (item: any) => {
+    const isAlreadyFavorite = favorite.some((fav) => fav.id === item.id);
+    if (!isAlreadyFavorite) {
+      const updatedFavorites = [...favorite, item];
+      setFavorite(updatedFavorites);
+      saveToLocalStorage("favorites", updatedFavorites);
+    }
   };
 
   useEffect(() => {
@@ -34,26 +53,17 @@ function Details() {
 
     axios
       .get(`https://df2174b8e5e5a31d.mokky.dev/MEGA_news/${id}`)
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch(() => {
-        setError("Ma'lumotlarni olishda xatolik yuz berdi!");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .then((res) => setData(res.data))
+      .catch(() => setError("Ma'lumotlarni olishda xatolik yuz berdi!"))
+      .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) {
+  if (loading)
     return <div className="text-center mt-10 text-xl">Yuklanmoqda...</div>;
-  }
-
-  if (error) {
+  if (error)
     return (
       <div className="text-center mt-10 text-red-500 text-xl">{error}</div>
     );
-  }
 
   return (
     <div className="container">
@@ -66,15 +76,15 @@ function Details() {
               className="w-full h-[500px] object-cover rounded-xl mt-[1px]"
             />
             <div className="flex justify-center gap-20 items-center mt-4 text-sm text-[#3E3232BF]">
-              <span className=" flex items-center gap-3">
+              <span className="flex items-center gap-3">
                 <CiCalendar />
                 {data.postDate || "Sana mavjud emas"}
               </span>
-              <span className=" flex items-center gap-3">
+              <span className="flex items-center gap-3">
                 <BiMessageRoundedDots />
                 {data.commentsCount || 0} Kommentariya
               </span>
-              <span className=" flex items-center gap-3">
+              <span className="flex items-center gap-3">
                 <GoFileDirectory />
                 {data.categoryName || "Kategoriya"}
               </span>
@@ -88,23 +98,8 @@ function Details() {
             <p className="text-md text-[#3E3232]">{data.desc}</p>
           </div>
 
-          {/* Second Image with Description */}
-          {/* <div className="mt-6">
-            <img
-              src={data.postimg || "https://via.placeholder.com/1200x600"}
-              alt="Secondary"
-              className="w-[900px] h-90 object-cover rounded-lg mx-auto"
-            />
-            <div className="flex flex-col gap-2 items-start text-gray-800">
-              <h3 className="text-[19px] text-[#3E3232] font-semibold  mt-6">
-                {data.authorName}
-              </h3>
-            </div>
-            <p className="text-gray-800 mt-2">{data.additionalDesc}</p>
-          </div> */}
-
           <div className="mt-6">
-            <Commment id={id} postId={data.id} />
+            <Commment />
           </div>
         </div>
 
@@ -115,7 +110,14 @@ function Details() {
                 <FiSend />
                 Share
               </button>
-              <button className="bg-gray-200 text-stone-500 p-2 rounded-xl flex items-center gap-2">
+              <button
+                onClick={() => handleFavorite(data)}
+                className={`bg-gray-200 text-stone-500 p-2 rounded-xl flex items-center gap-2 ${
+                  favorite.some((fav) => fav.id === data.id)
+                    ? "bg-red-400 text-white"
+                    : ""
+                }`}
+              >
                 <IoBookmarkOutline />
                 Marking
               </button>
@@ -129,7 +131,7 @@ function Details() {
           <div className="bg-[#F5F5F5] p-4 shadow rounded-lg">
             <div className="flex items-center space-x-4">
               <img
-                src={data.userImg}
+                src={data.userImg || "https://via.placeholder.com/150"}
                 alt="User"
                 className="w-16 h-16 rounded-lg object-cover"
               />
@@ -149,70 +151,31 @@ function Details() {
                   }`}
                 >
                   <GoPlus />
-                  <span className="-mt-1">
-                    {follow ? "Following" : "Follow"}
-                  </span>
+                  <span>{follow ? "Following" : "Follow"}</span>
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Tags */}
           <div className="bg-[#F5F5F5] p-4 shadow rounded-lg">
-            <div className="flex items-center mb-2">
-              <span className="bg-[#F81539] w-[6px] h-[15px] rounded-lg inline-block mr-4"></span>
-              <h3 className="text-lg font-semibold">tags</h3>
-            </div>
-            <span className=" text-[#3E3232BF]">
-              Montenegro Visit Croatia Luxury Travel
-              <br />
-              Travel Log Paradise Island Travel Info
-            </span>
-            <div className="flex flex-wrap gap-2"></div>
+            <h3 className="text-lg font-semibold">Tags</h3>
+            <p className="text-[#3E3232BF] mt-2">
+              Montenegro Visit Croatia Luxury Travel Paradise Island
+            </p>
           </div>
 
-          {/* Top Posts */}
           <div className="bg-[#F5F5F5] p-4 shadow rounded-lg">
-            <div className="flex items-center">
-              <span className="bg-[#F81539] w-[6px] h-[15px] rounded-lg inline-block mr-4"></span>
-              <h3 className="text-lg font-semibold">Top Posts</h3>
-            </div>
-            <div className=" mt-4">
-              <ToppostDetails />
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="relative">
-              <img
-                src="https://www.figma.com/file/NJjwtbj98TLF8h7RIKE1B9/image/bcaa1998c061dfefe4e2504912040d61133515da"
-                alt="Ad 1"
-                className="w-full h-[150px] object-cover rounded-[12px] blur-sm"
-              />
-              <span className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 text-white text-base font-semibold rounded-lg">
-                Advertisement <br />
-                360 px * 180 px
-              </span>
-            </div>
-            <div className="relative">
-              <img
-                src="https://www.figma.com/file/NJjwtbj98TLF8h7RIKE1B9/image/0196b16b00ec6b607a7ce18a9a504cbc9c3ded95"
-                alt="Ad 2"
-                className="w-full h-[150px] object-cover rounded-[12px] blur-sm"
-              />
-              <span className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 text-white text-base font-semibold rounded-lg">
-                Advertisement <br />
-                360 px * 180 px
-              </span>
-            </div>
+            <h3 className="text-lg font-semibold">Top Posts</h3>
+            <ToppostDetails />
           </div>
         </div>
       </div>
-      <div className=" mt-20">
+
+      <div className="mt-20">
         <ReletedPost />
       </div>
     </div>
   );
-}
+};
 
 export default Details;

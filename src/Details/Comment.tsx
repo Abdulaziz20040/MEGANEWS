@@ -15,7 +15,7 @@ interface CommentProps {
   id: string;
 }
 
-const Comment: React.FC<CommentProps> = ({ id }) => {
+const Comment: React.FC<CommentProps> = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [comments, setComments] = useState<CommentType[]>([]);
@@ -53,35 +53,35 @@ const Comment: React.FC<CommentProps> = ({ id }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setLoading(true);
 
-    try {
-      const payload = {
-        username: formData.name,
-        userimg: "",
-        commt: formData.comment,
-        commnetDate: new Date().toLocaleString(),
-      };
+  //   try {
+  //     const payload = {
+  //       username: formData.name,
+  //       userimg: "",
+  //       commt: formData.comment,
+  //       commnetDate: new Date().toLocaleString(),
+  //     };
 
-      const response = await axios.post(
-        `https://df2174b8e5e5a31d.mokky.dev/MEGA_news/${id}/comment`,
-        payload
-      );
+  //     const response = await axios.post(
+  //       `https://df2174b8e5e5a31d.mokky.dev/MEGA_news/${id}/comment`,
+  //       payload
+  //     );
 
-      console.log("Izoh muvaffaqiyatli qo'shildi:", response.data);
+  //     console.log("Izoh muvaffaqiyatli qo'shildi:", response.data);
 
-      setComments((prevData) => [...prevData, payload]);
+  //     setComments((prevData) => [...prevData, payload]);
 
-      setFormData({ name: "", comment: "" });
-    } catch (err: any) {
-      console.error("Izoh qo'shishda xato:", err.response);
-      setError("Izohni qo'shib bo'lmadi");
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     setFormData({ name: "", comment: "" });
+  //   } catch (err: any) {
+  //     console.error("Izoh qo'shishda xato:", err.response);
+  //     setError("Izohni qo'shib bo'lmadi");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className="comment-section">
@@ -131,7 +131,7 @@ const Comment: React.FC<CommentProps> = ({ id }) => {
           <h3 className="text-lg font-semibold">Add a comment</h3>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">

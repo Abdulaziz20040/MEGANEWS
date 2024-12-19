@@ -105,9 +105,11 @@ const Header: React.FC = () => {
             </Select>
           </li>
           <li>
-            <button className="bg-[#F5F5F5] p-3 rounded-lg">
-              <IoBookmarkOutline className="text-[18px]" />
-            </button>
+            <Link to={"/favortes"}>
+              <button className="bg-[#F5F5F5] p-3 rounded-lg">
+                <IoBookmarkOutline className="text-[18px]" />
+              </button>
+            </Link>
           </li>
         </ul>
       </div>

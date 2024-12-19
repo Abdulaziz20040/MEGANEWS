@@ -10,6 +10,7 @@ import Details from "./Details/Details";
 import EditProdil from "./User/EditProdil";
 import Home from "./Home/Home";
 import Profil from "./User/Profil";
+import Favorites from "./Pages/Favorite";
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
             <Route path="allnewpost" element={<Alltrendyposts />} />
             <Route path="details/:id" element={<Details />} />
             <Route path="/edit-profile" element={<EditProdil />} />
+            <Route path="/favortes" element={<Favorites />} />
           </Route>
         </Routes>
       </Router>
