@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaBookmark } from "react-icons/fa";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import "tailwindcss/tailwind.css";
 
