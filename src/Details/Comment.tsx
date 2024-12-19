@@ -53,35 +53,37 @@ const Comment: React.FC<CommentProps> = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   setLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
 
-  //   try {
-  //     const payload = {
-  //       username: formData.name,
-  //       userimg: "",
-  //       commt: formData.comment,
-  //       commnetDate: new Date().toLocaleString(),
-  //     };
+    try {
+      const payload = {
+        username: formData.name,
+        userimg:
+          "https://img.freepik.com/premium-vector/vector-flat-illustration-grayscale-avatar-user-profile-person-icon-gender-neutral-silhouette-profile-picture-suitable-social-media-profiles-icons-screensavers-as-templatex9xa_719432-875.jpg?semt=ais_hybrid",
+        comment: formData.comment,
+        commentDate: new Date().toLocaleString(),
+      };
 
-  //     const response = await axios.post(
-  //       `https://df2174b8e5e5a31d.mokky.dev/MEGA_news/${id}/comment`,
-  //       payload
-  //     );
+      const response = await axios.post(
+        `https://df2174b8e5e5a31d.mokky.dev/MEGA_news`,
+        payload
+      );
 
-  //     console.log("Izoh muvaffaqiyatli qo'shildi:", response.data);
+      console.log("Izoh muvaffaqiyatli qo'shildi:", response.data);
 
-  //     setComments((prevData) => [...prevData, payload]);
+      // Update the comments state with the new comment
+      setComments((prevData) => [...prevData, payload]);
 
-  //     setFormData({ name: "", comment: "" });
-  //   } catch (err: any) {
-  //     console.error("Izoh qo'shishda xato:", err.response);
-  //     setError("Izohni qo'shib bo'lmadi");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      setFormData({ name: "", comment: "" });
+    } catch (err: any) {
+      console.error("Izoh qo'shishda xato:", err.response);
+      setError("Izohni qo'shib bo'lmadi");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="comment-section">
@@ -102,17 +104,20 @@ const Comment: React.FC<CommentProps> = () => {
               key={index}
               className="flex justify-between items-center w-full mb-4"
             >
-              <div>
+              <div className=" flex items-center gap-2">
                 {item.userimg && (
                   <img
                     src={item.userimg}
                     alt={item.username}
-                    className="w-10 h-10 rounded-full"
+                    className="w-10 h-11 rounded-full object-cover"
                   />
                 )}
-                <h1 className="font-bold">{item.username}</h1>
-                <p className="text-sm text-gray-600">{item.commentDate}</p>
-                <p className="text-sm">{item.comment}</p>
+                <div>
+                  {" "}
+                  <p className="text-sm text-gray-600">{item.commentDate}</p>
+                  <h1 className="font-bold">{item.username}</h1>
+                  <p className="text-sm">{item.comment}</p>
+                </div>
               </div>
               <button className="flex items-center text-sm text-blue-500 mt-2 bg-[#3E32320D] px-4 py-2 rounded-lg hover:bg-[#3E32320D] transition duration-300">
                 <FaReply className="mr-2 text-blue-500" />
@@ -131,7 +136,7 @@ const Comment: React.FC<CommentProps> = () => {
           <h3 className="text-lg font-semibold">Add a comment</h3>
         </div>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">

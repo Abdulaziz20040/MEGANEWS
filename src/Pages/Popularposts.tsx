@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaChevronLeft, FaChevronRight, FaBookmark } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
+import { IoBookmarkOutline } from "react-icons/io5";
 
 interface Post {
   id: number;
@@ -40,6 +41,23 @@ const Popularposts: React.FC = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === posts.length - 1 ? 0 : prevIndex + 1
     );
+  };
+
+  const [favorite, setFavorite] = useState<Post[]>(() => {
+    const savedFavorites = localStorage.getItem("favorites");
+    return savedFavorites ? JSON.parse(savedFavorites) : [];
+  });
+
+  const handleFavorite = (post: Post) => {
+    const isAlreadyFavorite = favorite.some((fav) => fav.id === post.id);
+    let updatedFavorites;
+    if (!isAlreadyFavorite) {
+      updatedFavorites = [...favorite, post];
+    } else {
+      updatedFavorites = favorite.filter((fav) => fav.id !== post.id);
+    }
+    setFavorite(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
 
   return (
@@ -110,7 +128,16 @@ const Popularposts: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex items-center">
-                    <FaBookmark className="text-gray-400 hover:text-blue-500 cursor-pointer text-lg" />
+                    <button
+                      onClick={() => handleFavorite(post)}
+                      className={`bg-gray-200 text-stone-500 p-2 rounded-xl flex items-center gap-2 ${
+                        favorite.some((fav) => fav.id === post.id)
+                          ? "bg-red-400 text-white"
+                          : ""
+                      }`}
+                    >
+                      <IoBookmarkOutline />
+                    </button>
                   </div>
                 </div>
               </div>

@@ -9,9 +9,13 @@ const { Option } = Select;
 
 const Header: React.FC = () => {
   const [categories, setCategories] = useState<string[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Fetch categories and products
     fetch("https://df2174b8e5e5a31d.mokky.dev/MEGA_news")
       .then((response) => response.json())
       .then((data) => {
@@ -21,14 +25,42 @@ const Header: React.FC = () => {
             .filter((category: any) => category)
         );
       });
+
+    fetch("https://df2174b8e5e5a31d.mokky.dev/MEGA_news")
+      .then((response) => response.json())
+      .then((data) => setProducts(data));
   }, []);
 
   const handleCategoryChange = (value: string) => {
     navigate(`/${value}`);
   };
 
+  useEffect(() => {
+    if (searchTerm) {
+      const results = products.filter((product) =>
+        product.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredProducts(results);
+    } else {
+      setFilteredProducts([]);
+    }
+  }, [searchTerm, products]);
+
+  useEffect(() => {
+    // Reset search term when navigating to a new page
+    const handleBeforeUnload = () => {
+      setSearchTerm("");
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   return (
-    <div className=" mt-3">
+    <div className="mt-3">
       <div className="flex flex-wrap justify-between items-center">
         <ul className="flex items-center gap-6 mt-2">
           <Link to="/">
@@ -78,6 +110,8 @@ const Header: React.FC = () => {
             />
             <input
               type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search anything"
               className="bg-gray-100 py-2 w-[250px] md:w-[300px] rounded-lg outline-none pl-[45px]"
             />
@@ -85,6 +119,22 @@ const Header: React.FC = () => {
               style={{ fontSize: "20px" }}
               className="absolute top-5 right-5 cursor-pointer"
             />
+            {filteredProducts.length > 0 && (
+              <div className="absolute top-full left-0 w-[300px] z-10 bg-white shadow-lg mt-2 rounded-lg max-h-60 overflow-auto">
+                {filteredProducts.map((product) => (
+                  <Link key={product.id} to={`/details/${product.id}`}>
+                    <div className="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
+                      <img
+                        src={product.img}
+                        alt={product.title}
+                        className="w-10 h-10 mr-2"
+                      />
+                      <span className="line-clamp-2">{product.title}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </li>
           <li className="flex items-center gap-2">
             <Link to="/profil">

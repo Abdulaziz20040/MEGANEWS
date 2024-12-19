@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useProduct } from "../context/Context";
-import { FaBookmark } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 
 function Favorites() {
