@@ -10,11 +10,7 @@ interface CommentType {
   userimg?: string;
 }
 
-interface CommentProps {
-  id: string;
-}
-
-const Comment: React.FC<CommentProps> = () => {
+const Comment: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [comments, setComments] = useState<CommentType[]>([]);
@@ -110,7 +106,6 @@ const Comment: React.FC<CommentProps> = () => {
                   />
                 )}
                 <div>
-                  {" "}
                   <h1 className="font-bold">{item.username}</h1>
                   <p className="text-sm">{item.comment}</p>
                 </div>
