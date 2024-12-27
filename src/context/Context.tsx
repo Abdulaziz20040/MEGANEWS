@@ -1,34 +1,29 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
-// Type definitions
 interface Product {
   id: string;
   name: string;
-  [key: string]: any; // For additional product properties
+  [key: string]: any;
 }
 
 interface ProductContextType {
   favorite: Product[];
   addToFavorite: (product: Product) => void;
   deleteFromFavorite: (productId: string) => void;
-  loadFavorites: any;
-  setFavorite: any;
+  loadFavorites: () => void;
+  setFavorite: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
-// Default value for context
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
-// Props for the provider
 interface ProductContextProviderProps {
   children: ReactNode;
 }
 
-// Context Provider
 const ProductContextProvider: React.FC<ProductContextProviderProps> = ({
   children,
 }) => {
   const [favorite, setFavorite] = useState<Product[]>(() => {
-    // Load initial favorites from localStorage
     try {
       const savedFavorites = localStorage.getItem("favorites");
       return savedFavorites ? JSON.parse(savedFavorites) : [];
@@ -72,12 +67,14 @@ const ProductContextProvider: React.FC<ProductContextProviderProps> = ({
         setFavorite,
       }}
     >
-      {children}
+      <div>
+        {/* Ichki buttonlarni to'g'ri nesting qilishni e'tiborga oling */}
+        {children}
+      </div>
     </ProductContext.Provider>
   );
 };
 
-// Custom hook for accessing the context
 export const useProduct = (): ProductContextType => {
   const context = useContext(ProductContext);
   if (!context) {
@@ -86,5 +83,4 @@ export const useProduct = (): ProductContextType => {
   return context;
 };
 
-// Exporting the provider
 export default ProductContextProvider;

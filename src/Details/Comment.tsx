@@ -7,7 +7,6 @@ import "./detals.css";
 interface CommentType {
   username: string;
   comment: string;
-  commentDate: string;
   userimg?: string;
 }
 
@@ -63,7 +62,6 @@ const Comment: React.FC<CommentProps> = () => {
         userimg:
           "https://img.freepik.com/premium-vector/vector-flat-illustration-grayscale-avatar-user-profile-person-icon-gender-neutral-silhouette-profile-picture-suitable-social-media-profiles-icons-screensavers-as-templatex9xa_719432-875.jpg?semt=ais_hybrid",
         comment: formData.comment,
-        commentDate: new Date().toLocaleString(),
       };
 
       const response = await axios.post(
@@ -73,7 +71,6 @@ const Comment: React.FC<CommentProps> = () => {
 
       console.log("Izoh muvaffaqiyatli qo'shildi:", response.data);
 
-      // Update the comments state with the new comment
       setComments((prevData) => [...prevData, payload]);
 
       setFormData({ name: "", comment: "" });
@@ -114,7 +111,6 @@ const Comment: React.FC<CommentProps> = () => {
                 )}
                 <div>
                   {" "}
-                  <p className="text-sm text-gray-600">{item.commentDate}</p>
                   <h1 className="font-bold">{item.username}</h1>
                   <p className="text-sm">{item.comment}</p>
                 </div>

@@ -45,8 +45,8 @@ function ToppostDetails() {
     <div className="hide-scrollbar h-[500px] flex flex-col gap-4">
       {topPosts.length > 0 ? (
         topPosts.map((item) => (
-          <Link to={`/details/${item.id}`}>
-            <div key={item.id} className="flex items-center gap-4">
+          <Link to={`/details/${item.id}`} key={item.id}>
+            <div className="flex items-center gap-4">
               <img
                 className=" w-[130px] h-[80px] rounded-lg"
                 src={item.img}

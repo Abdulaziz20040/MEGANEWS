@@ -80,13 +80,14 @@ const Latesvedios: React.FC = () => {
                 className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 p-4"
               >
                 <div className="relative">
-                  <IoPlayCircleOutline className="absolute top-[33%] left-[45%] cursor-pointer text-white text-7xl" />
                   <Link to={`/details/${post.id}`}>
-                    <img
+                    <iframe
+                      className="w-[100%] h-[400px] object-cover rounded-lg"
                       src={post.img}
-                      alt={post.title}
-                      className="w-[900px] h-[400px] object-cover rounded-lg"
-                    />
+                      title={post.title}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    ></iframe>
                   </Link>
 
                   <div className="absolute left-5 bottom-3 bg-gray-300 w-[95%] p-4 rounded-lg">
@@ -119,22 +120,24 @@ const Latesvedios: React.FC = () => {
                 key={post.id}
                 className="bg-white shadow-lg w-[544px] flex rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 p-4"
               >
-                <Link to={`/details/${post.id}`}>
-                  <img
-                    src={post.img}
-                    alt={post.title}
-                    className="w-full h-[180px] object-cover rounded-lg"
-                  />
-                </Link>
+                <iframe
+                  className="w-[250px] h-[180px] object-cover rounded-lg"
+                  src={post.img}
+                  title={post.title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                ></iframe>
                 <div className="w-full h-[120px] p-3 flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-sm font-bold text-gray-800 line-clamp-1">
-                      {post.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm mt-2  line-clamp-6">
-                      {post.desc}
-                    </p>
-                  </div>
+                  <Link to={`/details/${post.id}`}>
+                    <div>
+                      <h3 className="text-sm font-bold text-gray-800 line-clamp-1">
+                        {post.title}
+                      </h3>
+                      <p className="text-gray-600 text-sm mt-2  line-clamp-6">
+                        {post.desc}
+                      </p>
+                    </div>
+                  </Link>
                 </div>
               </div>
             ))}

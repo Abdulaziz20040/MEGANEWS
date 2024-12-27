@@ -15,15 +15,13 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch categories and products
     fetch("https://df2174b8e5e5a31d.mokky.dev/MEGA_news")
       .then((response) => response.json())
       .then((data) => {
-        setCategories(
-          data
-            .map((item: { categoryName: string }) => item.categoryName)
-            .filter((category: any) => category)
-        );
+        const categoryList = data
+          .map((item: { categoryName: string }) => item.categoryName)
+          .filter((category: string) => category && category.trim() !== "");
+        setCategories(categoryList);
       });
 
     fetch("https://df2174b8e5e5a31d.mokky.dev/MEGA_news")
@@ -37,8 +35,10 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     if (searchTerm) {
-      const results = products.filter((product) =>
-        product.title.toLowerCase().includes(searchTerm.toLowerCase())
+      const results = products.filter(
+        (product) =>
+          product.title &&
+          product.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredProducts(results);
     } else {
@@ -47,7 +47,6 @@ const Header: React.FC = () => {
   }, [searchTerm, products]);
 
   useEffect(() => {
-    // Reset search term when navigating to a new page
     const handleBeforeUnload = () => {
       setSearchTerm("");
     };
@@ -72,7 +71,7 @@ const Header: React.FC = () => {
             <Select
               defaultValue="Categories"
               style={{ width: 120 }}
-              bordered={false}
+              variant="filled" // `bordered` o'rniga yangi API ishlatilmoqda
               onChange={handleCategoryChange}
             >
               {categories.length > 0 ? (
@@ -82,12 +81,14 @@ const Header: React.FC = () => {
                   </Option>
                 ))
               ) : (
-                <Option disabled>No categories available</Option>
+                <Option value="none" disabled>
+                  No categories available
+                </Option>
               )}
             </Select>
           </li>
           <li>
-            <Select defaultValue="Pages" style={{ width: 90 }} bordered={false}>
+            <Select defaultValue="Pages" style={{ width: 90 }} variant="filled">
               <Option value="Pages">Pages</Option>
               <Option value="Food">Food</Option>
               <Option value="Animal">Animal</Option>
@@ -123,13 +124,15 @@ const Header: React.FC = () => {
               <div className="absolute top-full left-0 w-[300px] z-10 bg-white shadow-lg mt-2 rounded-lg max-h-60 overflow-auto">
                 {filteredProducts.map((product) => (
                   <Link key={product.id} to={`/details/${product.id}`}>
-                    <div className="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
+                    <div className="flex items-start p-2 hover:bg-gray-100 cursor-pointer">
                       <img
                         src={product.img}
                         alt={product.title}
-                        className="w-10 h-10 mr-2"
+                        className="w-10 h-10 mr-2 rounded-lg"
                       />
-                      <span className="line-clamp-2">{product.title}</span>
+                      <span className="line-clamp-2 text-stone-600">
+                        {product.title}
+                      </span>
                     </div>
                   </Link>
                 ))}
@@ -147,7 +150,7 @@ const Header: React.FC = () => {
             <Select
               defaultValue="Behzad"
               style={{ width: 120 }}
-              bordered={false}
+              variant="filled"
             >
               <Option value="Behzad">
                 <Link to="/profil">Behzad</Link>

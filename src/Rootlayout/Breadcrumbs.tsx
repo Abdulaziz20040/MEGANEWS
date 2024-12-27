@@ -10,26 +10,29 @@ const Breadcrumbs: React.FC = () => {
     return null;
   }
 
-  return (
-    <Breadcrumb>
-      <Breadcrumb.Item>
-        <Link to="/">Home</Link>
-      </Breadcrumb.Item>
-      {pathnames.map((value, index) => {
-        const isDetailsPage = pathnames[index - 1] === "details";
-        const displayValue = isDetailsPage ? decodeURIComponent(value) : value;
-        const url = `/${pathnames.slice(0, index + 1).join("/")}`;
+  const breadcrumbItems = [
+    {
+      title: <Link to="/">Home</Link>,
+      key: "/",
+    },
+    ...pathnames.map((value, index) => {
+      const isDetailsPage = pathnames[index - 1] === "details";
+      const displayValue = isDetailsPage ? decodeURIComponent(value) : value;
+      const url = `/${pathnames.slice(0, index + 1).join("/")}`;
 
-        return index === pathnames.length - 1 ? (
-          <Breadcrumb.Item key={url}>{displayValue}</Breadcrumb.Item>
-        ) : (
-          <Breadcrumb.Item key={url}>
+      return {
+        title:
+          index === pathnames.length - 1 ? (
+            displayValue
+          ) : (
             <Link to={url}>{displayValue}</Link>
-          </Breadcrumb.Item>
-        );
-      })}
-    </Breadcrumb>
-  );
+          ),
+        key: url,
+      };
+    }),
+  ];
+
+  return <Breadcrumb items={breadcrumbItems} />;
 };
 
 export default Breadcrumbs;
