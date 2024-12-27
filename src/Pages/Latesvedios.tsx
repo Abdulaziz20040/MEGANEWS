@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { IoPlayCircleOutline } from "react-icons/io5";
 import "tailwindcss/tailwind.css";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
